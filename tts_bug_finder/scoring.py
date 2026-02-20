@@ -225,7 +225,14 @@ def evaluate_pair(
 
     lang = guess_language(ref_eval)
     ali, cer, wer = compute_alignment(ref_eval, hyp_eval, lang)
-    len_ratio = (len(hyp_eval) / max(1, len(ref_eval))) if ref_eval else 0.0
+
+    if lang == "en":
+        ref_len = len(tokenize_wer(ref_eval))
+        hyp_len = len(tokenize_wer(hyp_eval))
+    else:
+        ref_len = len(tokenize_cer(ref_eval))
+        hyp_len = len(tokenize_cer(hyp_eval))
+    len_ratio = (hyp_len / max(1, ref_len)) if ref_len else 0.0
     plaus = plausibility_score(ref_text, llm_score=llm_plausibility)
     crit_parts = critical_error_components(ref_eval, hyp_eval, len_ratio)
     tags = build_tags(lang, base_tags, crit_parts)

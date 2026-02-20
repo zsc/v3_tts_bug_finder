@@ -432,10 +432,9 @@ async def _run_search_async(
                         status = "candidate"
 
                 if status == "accepted" and kimi_cli is not None:
-                    if float(ev["critical_error_score"]) < float(thresholds["min_critical"]):
-                        same = await asyncio.to_thread(kimi_cli.semantic_equivalent, ev["ref_eval"], ev["hyp_eval"])
-                        if same is True:
-                            status = "rejected"
+                    same = await asyncio.to_thread(kimi_cli.semantic_equivalent, ev["ref_eval"], ev["hyp_eval"])
+                    if same is True:
+                        status = "rejected"
 
                 if status == "accepted" and kimi_cli is not None and existing_patterns:
                     novel = await asyncio.to_thread(

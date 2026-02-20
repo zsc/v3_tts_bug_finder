@@ -46,7 +46,8 @@ def guess_language(text: str) -> str:
 def tokenize_cer(text: str) -> list[str]:
     text = normalize_nfkc(text)
     text = re.sub(r"\s+", "", text)
-    return list(text)
+    keep_symbols = set("@._-/:#%+=&")
+    return [ch for ch in text if ch.isalnum() or ch in keep_symbols]
 
 
 def tokenize_wer(text: str) -> list[str]:
@@ -54,7 +55,22 @@ def tokenize_wer(text: str) -> list[str]:
     text = collapse_whitespace(text)
     if not text:
         return []
-    return text.split(" ")
+    keep_symbols = set("@._-/:#%+=&")
+    words: list[str] = []
+    for w in text.split(" "):
+        if not w:
+            continue
+        # Strip leading/trailing punctuation while keeping common inline symbols.
+        left = 0
+        right = len(w)
+        while left < right and (not w[left].isalnum()) and (w[left] not in keep_symbols):
+            left += 1
+        while right > left and (not w[right - 1].isalnum()) and (w[right - 1] not in keep_symbols):
+            right -= 1
+        ww = w[left:right]
+        if ww:
+            words.append(ww)
+    return words
 
 
 _RE_IPV4 = re.compile(r"\b\d{1,3}(?:\.\d{1,3}){3}\b")
@@ -220,10 +236,13 @@ def canonicalize_number_token(tok: str) -> str:
 _NEG_ZH = [
     "不",
     "没",
+    "沒",
     "无",
+    "無",
     "非",
     "未",
     "别",
+    "別",
     "不要",
     "不能",
     "无需",
@@ -266,9 +285,19 @@ def char_variety_penalty(text: str) -> float:
 
 
 def control_char_penalty(text: str) -> float:
+    allowed_invisibles = {
+        "\u200b",  # zero width space
+        "\u200c",  # zero width non-joiner
+        "\u200d",  # zero width joiner
+        "\u2060",  # word joiner
+        "\ufeff",  # BOM / zero width no-break space
+        "\u00ad",  # soft hyphen
+    }
     bad = 0
     for ch in text:
         cat = unicodedata.category(ch)
+        if ch in allowed_invisibles:
+            continue
         if cat.startswith("C") and ch not in ("\n", "\t"):
             bad += 1
     if bad == 0:
