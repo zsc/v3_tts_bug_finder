@@ -4,6 +4,7 @@ import argparse
 import pathlib
 
 from .exporter import export_cases
+from .report_html import write_html_report
 from .runner import run_search
 
 
@@ -35,6 +36,13 @@ def _build_parser() -> argparse.ArgumentParser:
     exp_p.add_argument("--out", default="artifacts/exports/export.jsonl")
     exp_p.add_argument("--format", choices=["jsonl"], default="jsonl")
     exp_p.add_argument("--status", default="accepted")
+
+    rep_p = sub.add_parser("report", help="Generate a single static HTML report (audio + GT + ASR)")
+    rep_p.add_argument("--db", nargs="+", default=["artifacts/bugs.sqlite"])
+    rep_p.add_argument("--out", default="artifacts/report.html")
+    rep_p.add_argument("--status", default="accepted")
+    rep_p.add_argument("--limit", type=int, default=0, help="0 means no limit")
+    rep_p.add_argument("--bundle-audio", action=argparse.BooleanOptionalAction, default=True)
 
     return parser
 
@@ -76,6 +84,15 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 0
 
+    if args.cmd == "report":
+        write_html_report(
+            db_paths=[pathlib.Path(p) for p in args.db],
+            out_path=pathlib.Path(args.out),
+            status=args.status,
+            limit=int(args.limit),
+            bundle_audio=bool(args.bundle_audio),
+        )
+        return 0
+
     parser.error(f"Unknown command: {args.cmd}")
     return 2
-
