@@ -37,12 +37,15 @@ class KimiCLI:
             raise RuntimeError(f"`{self.path}` not found on PATH")
 
     def ask_yes_no(self, prompt: str) -> bool | None:
-        proc = subprocess.run(
-            [self.path, "-p", prompt],
-            capture_output=True,
-            text=True,
-            timeout=self.timeout_sec,
-        )
+        try:
+            proc = subprocess.run(
+                [self.path, "-p", prompt],
+                capture_output=True,
+                text=True,
+                timeout=self.timeout_sec,
+            )
+        except subprocess.TimeoutExpired:
+            return None
         out = (proc.stdout or "") + "\n" + (proc.stderr or "")
         yn = _extract_last_yn(out)
         if yn == "Y":
