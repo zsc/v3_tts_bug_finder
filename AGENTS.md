@@ -531,6 +531,10 @@ signature 示例：
   * numbers/negation 抽取
   * 去重逻辑
 
+## 14. ASR & TTS
+ASR 用 `% no_proxy='*' whisper ../Step-Audio-EditX/examples/paralingustic_prompt.wav`
+TTS 用 macos 自带的：`% say "hello world"`
+
 ---
 
 ## 五、额外建议：让“新颖性”更像人工想要的“代表性”
