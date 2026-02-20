@@ -46,8 +46,24 @@ def guess_language(text: str) -> str:
 def tokenize_cer(text: str) -> list[str]:
     text = normalize_nfkc(text)
     text = re.sub(r"\s+", "", text)
-    keep_symbols = set("@._-/:#%+=&")
-    return [ch for ch in text if ch.isalnum() or ch in keep_symbols]
+    chars = list(text)
+    always_keep = {"@", "#", "%", "+", "=", "&"}
+    contextual = {".", "_", "-", "/", ":"}
+    out: list[str] = []
+    for i, ch in enumerate(chars):
+        if ch.isalnum():
+            out.append(ch)
+            continue
+        if ch in always_keep:
+            out.append(ch)
+            continue
+        if ch in contextual:
+            prev = chars[i - 1] if i > 0 else ""
+            nxt = chars[i + 1] if i + 1 < len(chars) else ""
+            if prev and nxt and prev.isalnum() and nxt.isalnum():
+                out.append(ch)
+            continue
+    return out
 
 
 def tokenize_wer(text: str) -> list[str]:
