@@ -226,6 +226,7 @@ async def _run_search_async(
     rng = random.Random(random_seed)
 
     initial = [QueueItem(text=s.text, seed_id=s.seed_id, tags=s.tags, mutation_trace=None, depth=0) for s in SEEDS]
+    rng.shuffle(initial)
     queue: deque[QueueItem] = deque(initial)
     queued: set[str] = {_norm_key(s.text) for s in SEEDS}
     seen: set[str] = set()

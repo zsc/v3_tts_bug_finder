@@ -1,7 +1,9 @@
-artifacts/
+artifacts*/
 __pycache__/
 *.pyc
 .pytest_cache/
 .mypy_cache/
 .ruff_cache/
 .DS_Store
+tmp_*.wav
+tmp_*.txt
