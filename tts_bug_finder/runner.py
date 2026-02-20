@@ -554,9 +554,6 @@ async def _run_search_async(
                     log_f.write(line + "\n")
                     log_f.write(f"  ref: {item.text}\n  hyp: {hyp_text}\n")
 
-                if mutate and status == "accepted" and novelty >= 0.5 and s_total >= 60.0 and item.depth < max_depth:
-                    pass
-
                 if mutate and status == "accepted" and novelty >= 0.5 and item.depth < max_depth:
                     allow_expand = s_total >= 60.0
                     if not allow_expand and expand_low_score_polyphone and ("polyphone" in ev["tags"] or "guwen" in ev["tags"]):
