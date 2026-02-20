@@ -19,7 +19,7 @@ def _build_parser() -> argparse.ArgumentParser:
     run_p.add_argument("--budget-accepted", type=int, default=100, help="Stop after N accepted")
     run_p.add_argument("--concurrency", type=int, default=8)
     run_p.add_argument("--time-limit-sec", type=float, default=0.0, help="0 means no limit")
-    run_p.add_argument("--tts", choices=["dummy", "macos_say", "http"], default="dummy")
+    run_p.add_argument("--tts", choices=["dummy", "macos_say", "qwen3_tts", "http"], default="dummy")
     run_p.add_argument("--asr", choices=["dummy", "whisper_cli", "http"], default="dummy")
     run_p.add_argument("--llm", choices=["none", "dummy", "http"], default="none")
     run_p.add_argument("--enable-llm", action="store_true")
@@ -32,6 +32,17 @@ def _build_parser() -> argparse.ArgumentParser:
     run_p.add_argument("--random-seed", type=int, default=1337)
     run_p.add_argument("--max-depth", type=int, default=2)
     run_p.add_argument("--t2s", action=argparse.BooleanOptionalAction, default=True, help="Normalize zh Traditional→Simplified if OpenCC available")
+    run_p.add_argument(
+        "--seed-tags",
+        default="",
+        help="Comma-separated tags to include as initial seeds (e.g. polyphone,guwen). Empty means all.",
+    )
+    run_p.add_argument(
+        "--only-hanzi",
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Restrict queue texts to no Latin letters or digits (Chinese-only style).",
+    )
     run_p.add_argument("--bootstrap-from-accepted", action=argparse.BooleanOptionalAction, default=True)
     run_p.add_argument("--persist-seen", action=argparse.BooleanOptionalAction, default=True)
     run_p.add_argument("--kimi", action="store_true", help="Use `kimi` CLI for semantic + novelty checks")
@@ -75,6 +86,8 @@ def main(argv: list[str] | None = None) -> int:
             random_seed=args.random_seed,
             max_depth=args.max_depth,
             t2s=args.t2s,
+            seed_tags=args.seed_tags,
+            only_hanzi=args.only_hanzi,
             bootstrap_from_accepted=args.bootstrap_from_accepted,
             persist_seen=args.persist_seen,
             kimi=args.kimi,

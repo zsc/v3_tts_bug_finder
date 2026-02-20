@@ -33,6 +33,36 @@ def _make_polyphone_zh() -> list[Seed]:
     return [Seed(seed_id=sid, text=txt, tags=tags) for sid, txt, tags in base]
 
 
+def _make_guwen_polyphone() -> list[Seed]:
+    base = [
+        ("guwen_polyphone_001", "朝闻道，夕死可矣。", ("polyphone", "guwen")),
+        ("guwen_polyphone_002", "朝辞白帝彩云间，千里江陵一日还。", ("polyphone", "guwen")),
+        ("guwen_polyphone_003", "行到水穷处，坐看云起时。", ("polyphone", "guwen")),
+        ("guwen_polyphone_004", "行行重行行，与君生别离。", ("polyphone", "guwen")),
+        ("guwen_polyphone_005", "重重叠叠上瑶台，几度呼童扫不开。", ("polyphone", "guwen")),
+        ("guwen_polyphone_006", "将军将至，士卒皆惊。", ("polyphone", "guwen")),
+        ("guwen_polyphone_007", "敌众我寡，愿降不愿战；天降大任于斯人也。", ("polyphone", "guwen")),
+        ("guwen_polyphone_008", "不为五斗米折腰。", ("polyphone", "guwen")),
+        ("guwen_polyphone_009", "问渠那得清如许，为有源头活水来。", ("polyphone", "guwen")),
+        ("guwen_polyphone_010", "礼乐崩坏，刑罚不中。", ("polyphone", "guwen")),
+        ("guwen_polyphone_011", "知之者不如好之者，好之者不如乐之者。", ("polyphone", "guwen")),
+        ("guwen_polyphone_012", "学而时习之，不亦说乎？", ("polyphone", "guwen")),
+        ("guwen_polyphone_013", "君子恶居下流，天下之恶皆归焉。", ("polyphone", "guwen")),
+        ("guwen_polyphone_014", "便宜之计，不可轻信；行事当方便。", ("polyphone", "guwen")),
+        ("guwen_polyphone_015", "薄酒一杯，聊以慰风尘。", ("polyphone", "guwen")),
+        ("guwen_polyphone_016", "薄薄春寒，柳色如烟。", ("polyphone", "guwen")),
+        ("guwen_polyphone_017", "解衣欲卧，忽闻风起。", ("polyphone", "guwen")),
+        ("guwen_polyphone_018", "曾子曰：吾日三省吾身。", ("polyphone", "guwen")),
+        ("guwen_polyphone_019", "度德量力，量力而行。", ("polyphone", "guwen")),
+        ("guwen_polyphone_020", "冠者五六人，童子六七人，浴乎沂，风乎舞雩。", ("polyphone", "guwen")),
+        ("guwen_polyphone_021", "更深夜静，更上一层楼。", ("polyphone", "guwen")),
+        ("guwen_polyphone_022", "重为轻根，静为躁君。", ("polyphone", "guwen")),
+        ("guwen_polyphone_023", "长者赐，不敢辞。", ("polyphone", "guwen")),
+        ("guwen_polyphone_024", "数罟不入洿池，鱼鳖不可胜食也。", ("polyphone", "guwen")),
+    ]
+    return [Seed(seed_id=sid, text=txt, tags=tags) for sid, txt, tags in base]
+
+
 def _make_tongue_twister_zh() -> list[Seed]:
     lines = [
         "四是四，十是十，十四是十四，四十是四十。",
@@ -270,6 +300,7 @@ def _make_boundary_short_long() -> list[Seed]:
 def all_seeds() -> list[Seed]:
     seeds: list[Seed] = []
     seeds.extend(_make_polyphone_zh())
+    seeds.extend(_make_guwen_polyphone())
     seeds.extend(_make_tongue_twister_zh())
     seeds.extend(_make_numbers_broadcast())
     seeds.extend(_make_mixed_lang())

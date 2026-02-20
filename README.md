@@ -26,6 +26,13 @@ python -m tts_bug_finder run --tts macos_say --asr whisper_cli --budget 120 --bu
 python -m tts_bug_finder report --db artifacts/bugs.sqlite --out artifacts/report.html --status accepted --bundle-audio
 ```
 
+Real chain (Qwen3-TTS 0.6B → `whisper` CLI):
+
+```bash
+# Requires `qwen_tts`, `torch`, `soundfile` in the current Python env.
+python -m tts_bug_finder run --tts qwen3_tts --asr whisper_cli --budget 30 --concurrency 1
+```
+
 Long-run script (macOS `say` → `whisper` + `kimi` judging):
 
 ```bash

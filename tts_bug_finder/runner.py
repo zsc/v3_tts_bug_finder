@@ -44,6 +44,8 @@ def run_search(
     random_seed: int,
     max_depth: int,
     t2s: bool,
+    seed_tags: str,
+    only_hanzi: bool,
     bootstrap_from_accepted: bool,
     persist_seen: bool,
     kimi: bool,
@@ -68,6 +70,8 @@ def run_search(
             random_seed=random_seed,
             max_depth=max_depth,
             t2s=t2s,
+            seed_tags=seed_tags,
+            only_hanzi=only_hanzi,
             bootstrap_from_accepted=bootstrap_from_accepted,
             persist_seen=persist_seen,
             kimi=kimi,
@@ -90,6 +94,26 @@ def _text_key(norm_text: str) -> str:
     return hashlib.sha1(norm_text.encode("utf-8", errors="ignore")).hexdigest()
 
 
+def _parse_tag_filter(s: str) -> set[str] | None:
+    raw = (s or "").strip()
+    if not raw:
+        return None
+    parts = [p.strip() for p in raw.split(",") if p.strip()]
+    if not parts:
+        return None
+    return set(parts)
+
+
+def _is_hanzi_only(text: str) -> bool:
+    norm = normalize_nfkc(text)
+    for ch in norm:
+        if ch.isdigit():
+            return False
+        if ("A" <= ch <= "Z") or ("a" <= ch <= "z"):
+            return False
+    return True
+
+
 def _wav_duration_sec(audio_bytes: bytes) -> float | None:
     try:
         import io
@@ -109,6 +133,21 @@ def _make_tts(kind: str) -> Any:
         return DummyTTSAdapter()
     if kind == "macos_say":
         return MacOSSayTTSAdapter()
+    if kind == "qwen3_tts":
+        from .adapters.qwen3_tts import Qwen3TTSAdapter
+
+        model_id = os.environ.get("QWEN3_TTS_MODEL", "Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice")
+        device = os.environ.get("QWEN3_TTS_DEVICE", "auto")
+        speaker = os.environ.get("QWEN3_TTS_SPEAKER", "Vivian")
+        language = os.environ.get("QWEN3_TTS_LANGUAGE", "Chinese")
+        instruct = os.environ.get("QWEN3_TTS_INSTRUCT")
+        return Qwen3TTSAdapter(
+            model_id=model_id,
+            device=device,
+            speaker=speaker,
+            language=language,
+            instruct=instruct or None,
+        )
     if kind == "http":
         url = os.environ.get("TTS_HTTP_URL")
         if not url:
@@ -232,6 +271,8 @@ async def _run_search_async(
     random_seed: int,
     max_depth: int,
     t2s: bool,
+    seed_tags: str,
+    only_hanzi: bool,
     bootstrap_from_accepted: bool,
     persist_seen: bool,
     kimi: bool,
@@ -257,6 +298,10 @@ async def _run_search_async(
     queue: deque[QueueItem] = deque()
     queued: set[str] = set()
     seen: set[str] = set()
+    seed_tag_filter = _parse_tag_filter(seed_tags)
+    expand_low_score_polyphone = bool(
+        seed_tag_filter and ("polyphone" in seed_tag_filter or "guwen" in seed_tag_filter)
+    )
 
     start = time.monotonic()
     total_eval = 0
@@ -330,13 +375,18 @@ async def _run_search_async(
         def enqueue(item: QueueItem) -> None:
             if len(queue) >= 20000:
                 return
+            if only_hanzi and not _is_hanzi_only(item.text):
+                return
             key = _norm_key(item.text)
             if key in seen or key in queued:
                 return
             queue.append(item)
             queued.add(key)
 
-        seeds = [QueueItem(text=s.text, seed_id=s.seed_id, tags=s.tags, mutation_trace=None, depth=0) for s in SEEDS]
+        seeds_src = SEEDS
+        if seed_tag_filter is not None:
+            seeds_src = [s for s in SEEDS if set(s.tags) & seed_tag_filter]
+        seeds = [QueueItem(text=s.text, seed_id=s.seed_id, tags=s.tags, mutation_trace=None, depth=0) for s in seeds_src]
         rng.shuffle(seeds)
         for it in seeds:
             enqueue(it)
@@ -351,8 +401,10 @@ async def _run_search_async(
             reps = list(best_by_cluster.values())
             rng.shuffle(reps)
             for c in reps[:80]:
-                base_text = str(c.get("ref_text") or "")
                 base_tags = tuple(c.get("tags") or [])
+                if seed_tag_filter is not None and not (set(base_tags) & seed_tag_filter):
+                    continue
+                base_text = str(c.get("ref_text") or "")
                 for m in mutate_all(base_text, base_tags, rng):
                     enqueue(
                         QueueItem(
@@ -503,16 +555,23 @@ async def _run_search_async(
                     log_f.write(f"  ref: {item.text}\n  hyp: {hyp_text}\n")
 
                 if mutate and status == "accepted" and novelty >= 0.5 and s_total >= 60.0 and item.depth < max_depth:
-                    for m in mutate_all(item.text, item.tags, rng):
-                        enqueue(
-                            QueueItem(
-                                text=m.text,
-                                seed_id=item.seed_id,
-                                tags=tuple(sorted(set(item.tags) | set(m.tags))),
-                                mutation_trace=m.mutation_trace,
-                                depth=item.depth + 1,
+                    pass
+
+                if mutate and status == "accepted" and novelty >= 0.5 and item.depth < max_depth:
+                    allow_expand = s_total >= 60.0
+                    if not allow_expand and expand_low_score_polyphone and ("polyphone" in ev["tags"] or "guwen" in ev["tags"]):
+                        allow_expand = True
+                    if allow_expand:
+                        for m in mutate_all(item.text, item.tags, rng):
+                            enqueue(
+                                QueueItem(
+                                    text=m.text,
+                                    seed_id=item.seed_id,
+                                    tags=tuple(sorted(set(item.tags) | set(m.tags))),
+                                    mutation_trace=m.mutation_trace,
+                                    depth=item.depth + 1,
+                                )
                             )
-                        )
 
                 if llm and item.depth < max_depth and float(ev["plausibility"]) >= float(thresholds["min_plausibility"]):
                     if 40.0 <= s_total <= 60.0:
