@@ -60,6 +60,16 @@ class BugDB(contextlib.AbstractContextManager["BugDB"]):
         )
         self.conn.execute("CREATE INDEX IF NOT EXISTS idx_cases_status ON cases(status)")
         self.conn.execute("CREATE INDEX IF NOT EXISTS idx_cases_score ON cases(score_total)")
+        self.conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS seen_texts (
+              text_key TEXT PRIMARY KEY,
+              text_norm TEXT,
+              first_seen_at TEXT NOT NULL
+            )
+            """
+        )
+        self.conn.execute("CREATE INDEX IF NOT EXISTS idx_seen_first_seen ON seen_texts(first_seen_at)")
 
     def upsert_case(self, row: dict[str, Any]) -> None:
         cols = list(row.keys())
@@ -101,3 +111,10 @@ class BugDB(contextlib.AbstractContextManager["BugDB"]):
     def count_by_status(self) -> dict[str, int]:
         cur = self.conn.execute("SELECT status, COUNT(*) AS c FROM cases GROUP BY status")
         return {r["status"]: int(r["c"]) for r in cur}
+
+    def mark_text_seen(self, *, text_key: str, text_norm: str, first_seen_at: str) -> bool:
+        cur = self.conn.execute(
+            "INSERT OR IGNORE INTO seen_texts(text_key, text_norm, first_seen_at) VALUES (?,?,?)",
+            (text_key, text_norm, first_seen_at),
+        )
+        return cur.rowcount == 1

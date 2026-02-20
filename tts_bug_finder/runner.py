@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import datetime as dt
+import hashlib
 import json
 import os
 import pathlib
@@ -18,6 +19,7 @@ from .adapters.macos_say import MacOSSayTTSAdapter
 from .adapters.whisper_cli import WhisperCLIASRAdapter
 from .db import BugDB
 from .dedupe import signature_similarity, text_similarity_no_punct
+from .kimi_cli import KimiCLI
 from .mutators import mutate_all
 from .scoring import evaluate_pair, score_total
 from .seeds import SEEDS
@@ -40,6 +42,13 @@ def run_search(
     voice: str | None,
     mutate: bool,
     random_seed: int,
+    max_depth: int,
+    t2s: bool,
+    bootstrap_from_accepted: bool,
+    persist_seen: bool,
+    kimi: bool,
+    kimi_timeout_sec: float,
+    kimi_max_patterns: int,
     thresholds: dict,
 ) -> None:
     asyncio.run(
@@ -57,6 +66,13 @@ def run_search(
             voice=voice,
             mutate=mutate,
             random_seed=random_seed,
+            max_depth=max_depth,
+            t2s=t2s,
+            bootstrap_from_accepted=bootstrap_from_accepted,
+            persist_seen=persist_seen,
+            kimi=kimi,
+            kimi_timeout_sec=kimi_timeout_sec,
+            kimi_max_patterns=kimi_max_patterns,
             thresholds=thresholds,
         )
     )
@@ -68,6 +84,10 @@ def _now_iso() -> str:
 
 def _norm_key(text: str) -> str:
     return collapse_whitespace(normalize_nfkc(text))
+
+
+def _text_key(norm_text: str) -> str:
+    return hashlib.sha1(norm_text.encode("utf-8", errors="ignore")).hexdigest()
 
 
 def _wav_duration_sec(audio_bytes: bytes) -> float | None:
@@ -186,11 +206,12 @@ async def _evaluate_once(
     asr: Any,
     voice: str | None,
     semaphore: asyncio.Semaphore,
+    t2s: bool,
 ) -> dict[str, Any]:
     async with semaphore:
         audio_bytes = await asyncio.to_thread(tts.synthesize, item.text, voice=voice)
         hyp_text = await asyncio.to_thread(asr.transcribe, audio_bytes)
-        eval_info = evaluate_pair(ref_text=item.text, hyp_text=hyp_text, base_tags=item.tags)
+        eval_info = evaluate_pair(ref_text=item.text, hyp_text=hyp_text, base_tags=item.tags, t2s=t2s)
         return {"item": item, "audio_bytes": audio_bytes, "hyp_text": hyp_text, "eval": eval_info}
 
 
@@ -209,6 +230,13 @@ async def _run_search_async(
     voice: str | None,
     mutate: bool,
     random_seed: int,
+    max_depth: int,
+    t2s: bool,
+    bootstrap_from_accepted: bool,
+    persist_seen: bool,
+    kimi: bool,
+    kimi_timeout_sec: float,
+    kimi_max_patterns: int,
     thresholds: dict,
 ) -> None:
     artifacts_dir.mkdir(parents=True, exist_ok=True)
@@ -222,13 +250,12 @@ async def _run_search_async(
     tts = _make_tts(tts_kind)
     asr = _make_asr(asr_kind)
     llm = _make_llm(llm_kind) if enable_llm else None
+    kimi_cli = KimiCLI(timeout_sec=kimi_timeout_sec) if kimi else None
 
     rng = random.Random(random_seed)
 
-    initial = [QueueItem(text=s.text, seed_id=s.seed_id, tags=s.tags, mutation_trace=None, depth=0) for s in SEEDS]
-    rng.shuffle(initial)
-    queue: deque[QueueItem] = deque(initial)
-    queued: set[str] = {_norm_key(s.text) for s in SEEDS}
+    queue: deque[QueueItem] = deque()
+    queued: set[str] = set()
     seen: set[str] = set()
 
     start = time.monotonic()
@@ -250,6 +277,41 @@ async def _run_search_async(
             if time_limit_sec and (time.monotonic() - start) >= time_limit_sec:
                 return True
             return False
+
+        def pattern_line_from_case(c: dict[str, Any]) -> str:
+            tags = c.get("tags") or []
+            tag_s = ",".join(str(t) for t in tags)
+            sig = c.get("signature") or {}
+            subs = sig.get("top_subs") if isinstance(sig, dict) else None
+            sub_s = ""
+            if isinstance(subs, list):
+                pairs: list[str] = []
+                for p in subs[:3]:
+                    if isinstance(p, list) and len(p) == 2:
+                        a, b = p
+                        pairs.append(f"{a}->{b}")
+                sub_s = "; ".join(pairs)
+            ref = str(c.get("ref_text", "")).replace("\n", " ").strip()
+            hyp = str(c.get("hyp_text", "")).replace("\n", " ").strip()
+            if len(ref) > 80:
+                ref = ref[:80] + "…"
+            if len(hyp) > 80:
+                hyp = hyp[:80] + "…"
+            return f"tags={tag_s} subs={sub_s} | GT={ref} | ASR={hyp}"
+
+        def build_pattern_lines() -> list[str]:
+            if not accepted_cases:
+                return []
+            best_by_cluster: dict[str, dict[str, Any]] = {}
+            for c in accepted_cases:
+                cluster_id = str(c.get("cluster_id") or "")
+                prev = best_by_cluster.get(cluster_id)
+                if prev is None or float(c.get("score_total") or 0.0) > float(prev.get("score_total") or 0.0):
+                    best_by_cluster[cluster_id] = c
+            reps = sorted(best_by_cluster.values(), key=lambda r: float(r.get("score_total") or 0.0), reverse=True)
+            return [pattern_line_from_case(c) for c in reps]
+
+        existing_patterns = build_pattern_lines()
 
         def max_sims(candidate_ref: str, candidate_hyp: str, candidate_sig: dict[str, Any]) -> tuple[float, float, float]:
             if not accepted_cases:
@@ -274,6 +336,34 @@ async def _run_search_async(
             queue.append(item)
             queued.add(key)
 
+        seeds = [QueueItem(text=s.text, seed_id=s.seed_id, tags=s.tags, mutation_trace=None, depth=0) for s in SEEDS]
+        rng.shuffle(seeds)
+        for it in seeds:
+            enqueue(it)
+
+        if bootstrap_from_accepted and accepted_cases and mutate:
+            best_by_cluster: dict[str, dict[str, Any]] = {}
+            for c in accepted_cases:
+                cluster_id = str(c.get("cluster_id") or "")
+                prev = best_by_cluster.get(cluster_id)
+                if prev is None or float(c.get("score_total") or 0.0) > float(prev.get("score_total") or 0.0):
+                    best_by_cluster[cluster_id] = c
+            reps = list(best_by_cluster.values())
+            rng.shuffle(reps)
+            for c in reps[:80]:
+                base_text = str(c.get("ref_text") or "")
+                base_tags = tuple(c.get("tags") or [])
+                for m in mutate_all(base_text, base_tags, rng):
+                    enqueue(
+                        QueueItem(
+                            text=m.text,
+                            seed_id=str(c.get("id") or ""),
+                            tags=tuple(sorted(set(base_tags) | set(m.tags))),
+                            mutation_trace=f"bootstrap:{m.mutation_trace}",
+                            depth=1,
+                        )
+                    )
+
         while (queue or pending) and not stop():
             while queue and len(pending) < concurrency and (total_eval + len(pending)) < budget_total_eval:
                 item = queue.popleft()
@@ -281,9 +371,14 @@ async def _run_search_async(
                 key = _norm_key(item.text)
                 if key in seen:
                     continue
+                if persist_seen:
+                    if not db.mark_text_seen(text_key=_text_key(key), text_norm=key, first_seen_at=_now_iso()):
+                        continue
                 seen.add(key)
                 pending.add(
-                    asyncio.create_task(_evaluate_once(item, tts=tts, asr=asr, voice=voice, semaphore=semaphore))
+                    asyncio.create_task(
+                        _evaluate_once(item, tts=tts, asr=asr, voice=voice, semaphore=semaphore, t2s=t2s)
+                    )
                 )
 
             if not pending:
@@ -336,6 +431,23 @@ async def _run_search_async(
                     if float(ev["plausibility"]) >= float(thresholds["min_plausibility"]) and 40.0 <= s_total <= 60.0:
                         status = "candidate"
 
+                if status == "accepted" and kimi_cli is not None:
+                    if float(ev["critical_error_score"]) < float(thresholds["min_critical"]):
+                        same = await asyncio.to_thread(kimi_cli.semantic_equivalent, ev["ref_eval"], ev["hyp_eval"])
+                        if same is True:
+                            status = "rejected"
+
+                if status == "accepted" and kimi_cli is not None and existing_patterns:
+                    novel = await asyncio.to_thread(
+                        kimi_cli.is_novel,
+                        ref_text=ev["ref_eval"],
+                        hyp_text=ev["hyp_eval"],
+                        existing_patterns=existing_patterns,
+                        max_patterns=kimi_max_patterns,
+                    )
+                    if novel is False:
+                        status = "duplicate"
+
                 case_id = str(uuid.uuid4())
                 duration_sec = _wav_duration_sec(audio_bytes)
 
@@ -382,6 +494,7 @@ async def _run_search_async(
                             "score_total": float(s_total),
                         }
                     )
+                    existing_patterns = build_pattern_lines()
                     line = (
                         f"[ACCEPT] score={s_total:.1f} cer={float(ev['cer']):.2f} wer={float(ev['wer']):.2f} "
                         f"crit={float(ev['critical_error_score']):.2f} tags={','.join(ev['tags'])} id={case_id}"
@@ -390,7 +503,7 @@ async def _run_search_async(
                     log_f.write(line + "\n")
                     log_f.write(f"  ref: {item.text}\n  hyp: {hyp_text}\n")
 
-                if mutate and status == "accepted" and novelty >= 0.5 and s_total >= 60.0 and item.depth < 2:
+                if mutate and status == "accepted" and novelty >= 0.5 and s_total >= 60.0 and item.depth < max_depth:
                     for m in mutate_all(item.text, item.tags, rng):
                         enqueue(
                             QueueItem(
@@ -402,7 +515,7 @@ async def _run_search_async(
                             )
                         )
 
-                if llm and item.depth < 2 and float(ev["plausibility"]) >= float(thresholds["min_plausibility"]):
+                if llm and item.depth < max_depth and float(ev["plausibility"]) >= float(thresholds["min_plausibility"]):
                     if 40.0 <= s_total <= 60.0:
                         prompt = _llm_prompt(item.text, hyp_text, ev["tags"], _diff_hint(ev["top_subs"]))
                         try:

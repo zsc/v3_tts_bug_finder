@@ -8,6 +8,7 @@ from typing import Any
 from .dedupe import signature_to_json
 from .metrics import Alignment, align_tokens
 from .text_utils import (
+    canonicalize_number_token,
     extract_negation_markers,
     extract_number_tokens,
     guess_language,
@@ -15,6 +16,7 @@ from .text_utils import (
     tokenize_cer,
     tokenize_wer,
 )
+from .zh_normalize import normalize_for_eval
 
 
 def clamp(v: float, lo: float = 0.0, hi: float = 1.0) -> float:
@@ -72,8 +74,8 @@ def numbers_mismatch_score(ref: str, hyp: str) -> tuple[float, list[str], list[s
     if (not ref_tokens) != (not hyp_tokens):
         return 1.0, ref_tokens, hyp_tokens
 
-    a = ref_tokens
-    b = hyp_tokens
+    a = [canonicalize_number_token(t) for t in ref_tokens]
+    b = [canonicalize_number_token(t) for t in hyp_tokens]
     ali = align_tokens(a, b)
     dist = ali.distance
     denom = max(1, max(len(a), len(b)))
@@ -216,20 +218,24 @@ def evaluate_pair(
     hyp_text: str,
     base_tags: tuple[str, ...] = (),
     llm_plausibility: float | None = None,
+    t2s: bool = True,
 ) -> dict[str, Any]:
-    lang = guess_language(ref_text)
-    ali, cer, wer = compute_alignment(ref_text, hyp_text, lang)
-    len_ratio = (len(hyp_text) / max(1, len(ref_text))) if ref_text else 0.0
+    ref_eval = normalize_for_eval(ref_text, t2s=t2s)
+    hyp_eval = normalize_for_eval(hyp_text, t2s=t2s)
+
+    lang = guess_language(ref_eval)
+    ali, cer, wer = compute_alignment(ref_eval, hyp_eval, lang)
+    len_ratio = (len(hyp_eval) / max(1, len(ref_eval))) if ref_eval else 0.0
     plaus = plausibility_score(ref_text, llm_score=llm_plausibility)
-    crit_parts = critical_error_components(ref_text, hyp_text, len_ratio)
+    crit_parts = critical_error_components(ref_eval, hyp_eval, len_ratio)
     tags = build_tags(lang, base_tags, crit_parts)
 
     if lang == "en":
-        ref_toks = tokenize_wer(ref_text)
-        hyp_toks = tokenize_wer(hyp_text)
+        ref_toks = tokenize_wer(ref_eval)
+        hyp_toks = tokenize_wer(hyp_eval)
     else:
-        ref_toks = tokenize_cer(ref_text)
-        hyp_toks = tokenize_cer(hyp_text)
+        ref_toks = tokenize_cer(ref_eval)
+        hyp_toks = tokenize_cer(hyp_eval)
     subs = top_substitutions(ref_toks, hyp_toks, ali)
 
     signature = build_signature(
@@ -255,5 +261,6 @@ def evaluate_pair(
         "signature_json": signature_to_json(signature),
         "cluster_id": cluster_id,
         "summary": summarize_case(cer=cer, wer=wer, critical_parts=crit_parts, lang_guess=lang),
+        "ref_eval": ref_eval,
+        "hyp_eval": hyp_eval,
     }
-

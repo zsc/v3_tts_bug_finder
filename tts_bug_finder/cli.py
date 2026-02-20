@@ -30,6 +30,13 @@ def _build_parser() -> argparse.ArgumentParser:
     run_p.add_argument("--min-critical", type=float, default=0.8)
     run_p.add_argument("--mutate", action=argparse.BooleanOptionalAction, default=True)
     run_p.add_argument("--random-seed", type=int, default=1337)
+    run_p.add_argument("--max-depth", type=int, default=2)
+    run_p.add_argument("--t2s", action=argparse.BooleanOptionalAction, default=True, help="Normalize zh Traditional→Simplified if OpenCC available")
+    run_p.add_argument("--bootstrap-from-accepted", action=argparse.BooleanOptionalAction, default=True)
+    run_p.add_argument("--persist-seen", action=argparse.BooleanOptionalAction, default=True)
+    run_p.add_argument("--kimi", action="store_true", help="Use `kimi` CLI for semantic + novelty checks")
+    run_p.add_argument("--kimi-timeout-sec", type=float, default=60.0)
+    run_p.add_argument("--kimi-max-patterns", type=int, default=120)
 
     exp_p = sub.add_parser("export", help="Export cases from SQLite")
     exp_p.add_argument("--db", default="artifacts/bugs.sqlite")
@@ -66,6 +73,13 @@ def main(argv: list[str] | None = None) -> int:
             voice=args.voice,
             mutate=args.mutate,
             random_seed=args.random_seed,
+            max_depth=args.max_depth,
+            t2s=args.t2s,
+            bootstrap_from_accepted=args.bootstrap_from_accepted,
+            persist_seen=args.persist_seen,
+            kimi=args.kimi,
+            kimi_timeout_sec=args.kimi_timeout_sec,
+            kimi_max_patterns=args.kimi_max_patterns,
             thresholds={
                 "min_plausibility": args.min_plausibility,
                 "min_cer": args.min_cer,
