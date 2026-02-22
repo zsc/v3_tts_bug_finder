@@ -34,6 +34,8 @@ def run_search(
     budget_total_eval: int,
     budget_accepted: int,
     concurrency: int,
+    tts_concurrency: int,
+    asr_concurrency: int,
     time_limit_sec: float,
     tts_kind: str,
     asr_kind: str,
@@ -60,6 +62,8 @@ def run_search(
             budget_total_eval=budget_total_eval,
             budget_accepted=budget_accepted,
             concurrency=concurrency,
+            tts_concurrency=tts_concurrency,
+            asr_concurrency=asr_concurrency,
             time_limit_sec=time_limit_sec,
             tts_kind=tts_kind,
             asr_kind=asr_kind,
@@ -148,6 +152,10 @@ def _make_tts(kind: str) -> Any:
             language=language,
             instruct=instruct or None,
         )
+    if kind == "indextts2":
+        from .adapters.indextts2 import IndexTTS2TTSAdapter
+
+        return IndexTTS2TTSAdapter.from_env()
     if kind == "http":
         url = os.environ.get("TTS_HTTP_URL")
         if not url:
@@ -161,7 +169,29 @@ def _make_asr(kind: str) -> Any:
         return DummyASRAdapter()
     if kind == "whisper_cli":
         model = os.environ.get("WHISPER_MODEL", "base")
-        return WhisperCLIASRAdapter(model=model)
+        device = os.environ.get("WHISPER_DEVICE")
+        model_dir = os.environ.get("WHISPER_MODEL_DIR")
+        threads_raw = os.environ.get("WHISPER_THREADS")
+        threads = int(threads_raw) if threads_raw and threads_raw.strip() else None
+
+        fp16_raw = os.environ.get("WHISPER_FP16")
+        if fp16_raw is not None:
+            s = fp16_raw.strip().lower()
+            if s in {"1", "true", "t", "yes", "y", "on"}:
+                fp16 = True
+            elif s in {"0", "false", "f", "no", "n", "off"}:
+                fp16 = False
+            else:
+                raise ValueError(f"Invalid WHISPER_FP16={fp16_raw!r}; use 1/0/true/false")
+        else:
+            if device and device.startswith("cuda"):
+                fp16 = True
+            elif device and device.startswith("cpu"):
+                fp16 = False
+            else:
+                fp16 = None
+
+        return WhisperCLIASRAdapter(model=model, device=device, fp16=fp16, model_dir=model_dir, threads=threads)
     if kind == "http":
         url = os.environ.get("ASR_HTTP_URL")
         if not url:
@@ -244,14 +274,16 @@ async def _evaluate_once(
     tts: Any,
     asr: Any,
     voice: str | None,
-    semaphore: asyncio.Semaphore,
+    tts_semaphore: asyncio.Semaphore,
+    asr_semaphore: asyncio.Semaphore,
     t2s: bool,
 ) -> dict[str, Any]:
-    async with semaphore:
+    async with tts_semaphore:
         audio_bytes = await asyncio.to_thread(tts.synthesize, item.text, voice=voice)
+    async with asr_semaphore:
         hyp_text = await asyncio.to_thread(asr.transcribe, audio_bytes)
-        eval_info = evaluate_pair(ref_text=item.text, hyp_text=hyp_text, base_tags=item.tags, t2s=t2s)
-        return {"item": item, "audio_bytes": audio_bytes, "hyp_text": hyp_text, "eval": eval_info}
+    eval_info = evaluate_pair(ref_text=item.text, hyp_text=hyp_text, base_tags=item.tags, t2s=t2s)
+    return {"item": item, "audio_bytes": audio_bytes, "hyp_text": hyp_text, "eval": eval_info}
 
 
 async def _run_search_async(
@@ -261,6 +293,8 @@ async def _run_search_async(
     budget_total_eval: int,
     budget_accepted: int,
     concurrency: int,
+    tts_concurrency: int,
+    asr_concurrency: int,
     time_limit_sec: float,
     tts_kind: str,
     asr_kind: str,
@@ -288,30 +322,34 @@ async def _run_search_async(
     log_path = artifacts_dir / "logs" / f"run_{dt.datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
     log_f = log_path.open("a", encoding="utf-8")
 
-    tts = _make_tts(tts_kind)
-    asr = _make_asr(asr_kind)
-    llm = _make_llm(llm_kind) if enable_llm else None
-    kimi_cli = KimiCLI(timeout_sec=kimi_timeout_sec) if kimi else None
+    tts: Any | None = None
+    db_cm: BugDB | None = None
+    try:
+        tts = _make_tts(tts_kind)
+        asr = _make_asr(asr_kind)
+        llm = _make_llm(llm_kind) if enable_llm else None
+        kimi_cli = KimiCLI(timeout_sec=kimi_timeout_sec) if kimi else None
 
-    rng = random.Random(random_seed)
+        rng = random.Random(random_seed)
 
-    queue: deque[QueueItem] = deque()
-    queued: set[str] = set()
-    seen: set[str] = set()
-    seed_tag_filter = _parse_tag_filter(seed_tags)
-    expand_low_score_polyphone = bool(
-        seed_tag_filter and ("polyphone" in seed_tag_filter or "guwen" in seed_tag_filter)
-    )
+        queue: deque[QueueItem] = deque()
+        queued: set[str] = set()
+        seen: set[str] = set()
+        seed_tag_filter = _parse_tag_filter(seed_tags)
+        expand_low_score_polyphone = bool(
+            seed_tag_filter and ("polyphone" in seed_tag_filter or "guwen" in seed_tag_filter)
+        )
 
-    start = time.monotonic()
-    total_eval = 0
-    accepted_new = 0
+        start = time.monotonic()
+        total_eval = 0
+        accepted_new = 0
 
-    semaphore = asyncio.Semaphore(max(1, int(concurrency)))
+        tts_sem = asyncio.Semaphore(max(1, int(tts_concurrency or concurrency)))
+        asr_sem = asyncio.Semaphore(max(1, int(asr_concurrency or concurrency)))
 
-    with BugDB(db_path) as db:
+        db_cm = BugDB(db_path)
+        db = db_cm.__enter__()
         accepted_cases = db.list_cases_minimal(status="accepted")
-
         pending: set[asyncio.Task] = set()
 
         def stop() -> bool:
@@ -429,7 +467,15 @@ async def _run_search_async(
                 seen.add(key)
                 pending.add(
                     asyncio.create_task(
-                        _evaluate_once(item, tts=tts, asr=asr, voice=voice, semaphore=semaphore, t2s=t2s)
+                        _evaluate_once(
+                            item,
+                            tts=tts,
+                            asr=asr,
+                            voice=voice,
+                            tts_semaphore=tts_sem,
+                            asr_semaphore=asr_sem,
+                            t2s=t2s,
+                        )
                     )
                 )
 
@@ -603,5 +649,20 @@ async def _run_search_async(
                     f"queue={len(queue)} db={counts}"
                 )
 
-    log_f.close()
-    print(f"Done. DB={db_path} log={log_path} eval={total_eval} accepted_new={accepted_new}")
+        print(f"Done. DB={db_path} log={log_path} eval={total_eval} accepted_new={accepted_new}")
+    finally:
+        if db_cm is not None:
+            try:
+                db_cm.__exit__(None, None, None)
+            except Exception:
+                pass
+        try:
+            log_f.close()
+        except Exception:
+            pass
+        close_fn = getattr(tts, "close", None) if tts is not None else None
+        if callable(close_fn):
+            try:
+                close_fn()
+            except Exception:
+                pass

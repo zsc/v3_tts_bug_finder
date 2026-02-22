@@ -1,0 +1,1191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>IndexTTS2 Accepted Bugs (GT vs ASR + WAV)</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 18px; }
+  header { position: sticky; top: 0; background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); padding: 10px 12px; border: 1px solid rgba(0,0,0,0.08); border-radius: 12px; z-index: 2; }
+  @media (prefers-color-scheme: dark) {
+    header { background: rgba(0,0,0,0.35); border-color: rgba(255,255,255,0.10); }
+  }
+  h1 { font-size: 18px; margin: 0 0 8px 0; }
+  .meta { font-size: 12px; opacity: 0.8; display: flex; gap: 12px; flex-wrap: wrap; }
+  .controls { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  input[type="search"] { width: min(560px, 100%); padding: 8px 10px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.20); background: transparent; }
+  button { padding: 7px 10px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.20); background: transparent; cursor: pointer; }
+  .list { margin-top: 14px; display: grid; gap: 12px; }
+  details.case { border: 1px solid rgba(0,0,0,0.10); border-radius: 12px; overflow: hidden; }
+  details.case > summary { list-style: none; cursor: pointer; padding: 10px 12px; display: grid; grid-template-columns: 110px 1fr; gap: 10px; align-items: center; }
+  details.case > summary::-webkit-details-marker { display: none; }
+  .score { font-variant-numeric: tabular-nums; font-weight: 700; }
+  .summary-line { font-size: 13px; display: grid; gap: 4px; }
+  .tags { font-size: 12px; opacity: 0.85; }
+  .case-body { padding: 12px; border-top: 1px solid rgba(0,0,0,0.08); }
+  .top-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 10px; }
+  audio { width: min(620px, 100%); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+  .panel { border: 1px solid rgba(0,0,0,0.10); border-radius: 12px; padding: 10px; }
+  .panel h3 { margin: 0 0 8px 0; font-size: 13px; opacity: 0.9; }
+  pre.text { margin: 0; white-space: pre-wrap; word-break: break-word; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size: 12.5px; line-height: 1.35; }
+  .kv { font-size: 12px; opacity: 0.85; display: grid; gap: 2px; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(0,0,0,0.20); font-size: 12px; opacity: 0.9; }
+  .filelink { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
+</style>
+</head>
+<body>
+<header>
+<h1>IndexTTS2 Accepted Bugs (GT vs ASR + WAV)</h1>
+<div class="meta"><div><span class="pill">cases</span> <strong id="caseCount">48</strong></div><div><span class='pill'>generated</span> 2026-02-22 18:03:19</div><div><span class='pill'>dir</span> <span class='filelink'>/root/autodl-tmp/v3_tts_bug_finder/indextts2_accepted_bundle_20260222</span></div></div>
+<div class="controls">
+  <input id="q" type="search" placeholder="Search in GT / ASR / tags..." />
+  <button id="expandAll">Expand all</button>
+  <button id="collapseAll">Collapse all</button>
+</div>
+</header>
+<div class="list" id="list">
+<details class="case" data-search="1630d78f-4c5b-4b58-af64-0dddbd19f133 broadcast, mixed_lang, numbers 本月目标：转化率 ≥ 12.5%，退款率 ≤ 1.2%。 本月目标 转化率大于等于百分之十二点五 推款率小于等于百分之一点二">
+<summary>
+<div class="score">83.3</div>
+<div class="summary-line"><div>本月目标：转化率 ≥ 12.5%，退款率 ≤ 1.2%。</div><div class="tags">broadcast, mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="1630d78f-4c5b-4b58-af64-0dddbd19f133.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 1630d78f-4c5b-4b58-af64-0dddbd19f133</div><div><strong>score</strong>: 83.3 &nbsp; <strong>cer</strong>: 1.15 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.67</div><div><strong>wav</strong>: <span class='filelink'>1630d78f-4c5b-4b58-af64-0dddbd19f133.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">本月目标：转化率 ≥ 12.5%，退款率 ≤ 1.2%。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">本月目标
+转化率大于等于百分之十二点五
+推款率小于等于百分之一点二</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="fe904a50-2851-4bb7-8888-a98520c90c83 mixed_lang 把参数写成 `--max-retry=3`，不要写成 `--maxretry=3`。 把参数写成B-C-Max-Ray-Tray等于三神 不要写成B-C-Max-Ray-Tray等于三">
+<summary>
+<div class="score">80.0</div>
+<div class="summary-line"><div>把参数写成 `--max-retry=3`，不要写成 `--maxretry=3`。</div><div class="tags">mixed_lang</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="fe904a50-2851-4bb7-8888-a98520c90c83.wav"></audio>
+<div class='kv'><div><strong>id</strong>: fe904a50-2851-4bb7-8888-a98520c90c83</div><div><strong>score</strong>: 80.0 &nbsp; <strong>cer</strong>: 1.00 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.40</div><div><strong>wav</strong>: <span class='filelink'>fe904a50-2851-4bb7-8888-a98520c90c83.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">把参数写成 `--max-retry=3`，不要写成 `--maxretry=3`。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">把参数写成B-C-Max-Ray-Tray等于三神
+不要写成B-C-Max-Ray-Tray等于三</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="ae4552a1-491b-4e7c-a922-2026cdbd1c2c broadcast, mixed_lang, numbers 请核对金额：¥1,234,567.89，若有误请立即反馈。 请核对金额一元二十三万四千五百六十七点八九 若有务情立即反馈">
+<summary>
+<div class="score">77.5</div>
+<div class="summary-line"><div>请核对金额：¥1,234,567.89，若有误请立即反馈。</div><div class="tags">broadcast, mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="ae4552a1-491b-4e7c-a922-2026cdbd1c2c.wav"></audio>
+<div class='kv'><div><strong>id</strong>: ae4552a1-491b-4e7c-a922-2026cdbd1c2c</div><div><strong>score</strong>: 77.5 &nbsp; <strong>cer</strong>: 0.78 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>ae4552a1-491b-4e7c-a922-2026cdbd1c2c.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">请核对金额：¥1,234,567.89，若有误请立即反馈。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">请核对金额一元二十三万四千五百六十七点八九
+若有务情立即反馈</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="96fd6484-eb28-4600-b4dd-13a9bebe7c0e broadcast, mixed_lang, numbers 请核对金额：¥1,234,567.89，若有误请立即反馈。 请核对金额一元二十三万四千五百六十七点八九 若有误情立即反馈">
+<summary>
+<div class="score">77.2</div>
+<div class="summary-line"><div>请核对金额：¥1,234,567.89，若有误请立即反馈。</div><div class="tags">broadcast, mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="96fd6484-eb28-4600-b4dd-13a9bebe7c0e.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 96fd6484-eb28-4600-b4dd-13a9bebe7c0e</div><div><strong>score</strong>: 77.2 &nbsp; <strong>cer</strong>: 0.74 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>96fd6484-eb28-4600-b4dd-13a9bebe7c0e.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">请核对金额：¥1,234,567.89，若有误请立即反馈。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">请核对金额一元二十三万四千五百六十七点八九
+若有误情立即反馈</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="2654301b-8a08-4bc6-8124-0ac968fa1a39 mixed_lang, numbers 把参数写成 `--max-retry=3`，不要写成 `--maxretry=3`。 把参数写成B--Max-Ray-Try等于33 不要写成B--Max-Ray-Try等于33">
+<summary>
+<div class="score">77.0</div>
+<div class="summary-line"><div>把参数写成 `--max-retry=3`，不要写成 `--maxretry=3`。</div><div class="tags">mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="2654301b-8a08-4bc6-8124-0ac968fa1a39.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 2654301b-8a08-4bc6-8124-0ac968fa1a39</div><div><strong>score</strong>: 77.0 &nbsp; <strong>cer</strong>: 0.70 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>2654301b-8a08-4bc6-8124-0ac968fa1a39.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">把参数写成 `--max-retry=3`，不要写成 `--maxretry=3`。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">把参数写成B--Max-Ray-Try等于33
+不要写成B--Max-Ray-Try等于33</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="a90c1ec0-a38b-4ac1-8bfa-a879fda7c9c2 mixed_lang 订单状态是 `PAID`，但 webhook 没收到 event=payment.succeeded。 订单状态是败配 但webhook没收到event 等于payment succeeded">
+<summary>
+<div class="score">74.3</div>
+<div class="summary-line"><div>订单状态是 `PAID`，但 webhook 没收到 event=payment.succeeded。</div><div class="tags">mixed_lang</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="a90c1ec0-a38b-4ac1-8bfa-a879fda7c9c2.wav"></audio>
+<div class='kv'><div><strong>id</strong>: a90c1ec0-a38b-4ac1-8bfa-a879fda7c9c2</div><div><strong>score</strong>: 74.3 &nbsp; <strong>cer</strong>: 0.00 &nbsp; <strong>wer</strong>: 1.00 &nbsp; <strong>critical</strong>: 0.33</div><div><strong>wav</strong>: <span class='filelink'>a90c1ec0-a38b-4ac1-8bfa-a879fda7c9c2.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">订单状态是 `PAID`，但 webhook 没收到 event=payment.succeeded。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">订单状态是败配
+但webhook没收到event
+等于payment succeeded</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="8d13a6a3-f570-4688-a6fe-a01afd85cf46 mixed_lang, numbers 请在 config.yaml 里把 timeout 设置为 30s，再重启。 请再坑费个 燕猫里把胎猫的设置为三十秒 再重启">
+<summary>
+<div class="score">73.1</div>
+<div class="summary-line"><div>请在 config.yaml 里把 timeout 设置为 30s，再重启。</div><div class="tags">mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="8d13a6a3-f570-4688-a6fe-a01afd85cf46.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 8d13a6a3-f570-4688-a6fe-a01afd85cf46</div><div><strong>score</strong>: 73.1 &nbsp; <strong>cer</strong>: 0.71 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>8d13a6a3-f570-4688-a6fe-a01afd85cf46.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">请在 config.yaml 里把 timeout 设置为 30s，再重启。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">请再坑费个
+燕猫里把胎猫的设置为三十秒
+再重启</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="bc9a4be8-45fb-49bb-a7d3-80ba675e4f7c broadcast, mixed_lang, numbers 请把 2^10 读成 1024，不要读成 210。 请把二十独成一千零二十四 不要独成二一零">
+<summary>
+<div class="score">70.9</div>
+<div class="summary-line"><div>请把 2^10 读成 1024，不要读成 210。</div><div class="tags">broadcast, mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="bc9a4be8-45fb-49bb-a7d3-80ba675e4f7c.wav"></audio>
+<div class='kv'><div><strong>id</strong>: bc9a4be8-45fb-49bb-a7d3-80ba675e4f7c</div><div><strong>score</strong>: 70.9 &nbsp; <strong>cer</strong>: 0.78 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.75</div><div><strong>wav</strong>: <span class='filelink'>bc9a4be8-45fb-49bb-a7d3-80ba675e4f7c.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">请把 2^10 读成 1024，不要读成 210。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">请把二十独成一千零二十四
+不要独成二一零</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="c755cee1-9e76-41b1-9067-29c44492ba05 mixed_lang, numbers, punctuation 如果你看到“404/500/502”，别慌：先刷新，再清缓存。 如果你看到五十分之四百零四 五百零二分之零 别晃 先刷新 再轻缓存">
+<summary>
+<div class="score">67.0</div>
+<div class="summary-line"><div>如果你看到“404/500/502”，别慌：先刷新，再清缓存。</div><div class="tags">mixed_lang, numbers, punctuation</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="c755cee1-9e76-41b1-9067-29c44492ba05.wav"></audio>
+<div class='kv'><div><strong>id</strong>: c755cee1-9e76-41b1-9067-29c44492ba05</div><div><strong>score</strong>: 67.0 &nbsp; <strong>cer</strong>: 0.69 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.75</div><div><strong>wav</strong>: <span class='filelink'>c755cee1-9e76-41b1-9067-29c44492ba05.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">如果你看到“404/500/502”，别慌：先刷新，再清缓存。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">如果你看到五十分之四百零四 五百零二分之零
+别晃 先刷新 再轻缓存</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="4db08361-f77d-41bc-8222-ed3fd7b464de mixed_lang 把参数写成 `--max-retry=3`，不要写成 `--maxretry=3`。 把参数写成 节俭减Max Retreat等于三 不要写成 节俭减Max Retreat等于三">
+<summary>
+<div class="score">66.0</div>
+<div class="summary-line"><div>把参数写成 `--max-retry=3`，不要写成 `--maxretry=3`。</div><div class="tags">mixed_lang</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="4db08361-f77d-41bc-8222-ed3fd7b464de.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 4db08361-f77d-41bc-8222-ed3fd7b464de</div><div><strong>score</strong>: 66.0 &nbsp; <strong>cer</strong>: 0.77 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.40</div><div><strong>wav</strong>: <span class='filelink'>4db08361-f77d-41bc-8222-ed3fd7b464de.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">把参数写成 `--max-retry=3`，不要写成 `--maxretry=3`。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">把参数写成
+节俭减Max Retreat等于三
+不要写成
+节俭减Max Retreat等于三</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="2bb357d3-2f12-459a-9aac-8edd1825d091 broadcast, mixed_lang, numbers 账单号：INV-2026-000123，开票日期 2026-02-01。 账单号因为两千零二十六 零零零一二三 开票日期2026年2月1日">
+<summary>
+<div class="score">64.8</div>
+<div class="summary-line"><div>账单号：INV-2026-000123，开票日期 2026-02-01。</div><div class="tags">broadcast, mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="2bb357d3-2f12-459a-9aac-8edd1825d091.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 2bb357d3-2f12-459a-9aac-8edd1825d091</div><div><strong>score</strong>: 64.8 &nbsp; <strong>cer</strong>: 0.64 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.80</div><div><strong>wav</strong>: <span class='filelink'>2bb357d3-2f12-459a-9aac-8edd1825d091.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">账单号：INV-2026-000123，开票日期 2026-02-01。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">账单号因为两千零二十六
+零零零一二三
+开票日期2026年2月1日</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="0457a42d-566c-4ec0-8e2f-4ccacb84d5c8 broadcast, mixed_lang, numbers 航班 CA1234 于 08:20 起飞，预计 10:05 到达，延误 15 分钟。 航班 擦二三四 于八点二十分起飞 预计十点零五分到达 延误十五分钟">
+<summary>
+<div class="score">61.8</div>
+<div class="summary-line"><div>航班 CA1234 于 08:20 起飞，预计 10:05 到达，延误 15 分钟。</div><div class="tags">broadcast, mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="0457a42d-566c-4ec0-8e2f-4ccacb84d5c8.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 0457a42d-566c-4ec0-8e2f-4ccacb84d5c8</div><div><strong>score</strong>: 61.8 &nbsp; <strong>cer</strong>: 0.58 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.86</div><div><strong>wav</strong>: <span class='filelink'>0457a42d-566c-4ec0-8e2f-4ccacb84d5c8.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">航班 CA1234 于 08:20 起飞，预计 10:05 到达，延误 15 分钟。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">航班 擦二三四 于八点二十分起飞
+预计十点零五分到达 延误十五分钟</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="472e37b9-c7f7-4f40-8144-edd9818ef291 mixed_lang, numbers 文件名为 report_2026-02-20_FINAL_v3.pdf，请确认版本。 文件名为Report T 2026年2月20日 成Final PDF 请确认版本">
+<summary>
+<div class="score">59.9</div>
+<div class="summary-line"><div>文件名为 report_2026-02-20_FINAL_v3.pdf，请确认版本。</div><div class="tags">mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="472e37b9-c7f7-4f40-8144-edd9818ef291.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 472e37b9-c7f7-4f40-8144-edd9818ef291</div><div><strong>score</strong>: 59.9 &nbsp; <strong>cer</strong>: 0.46 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>472e37b9-c7f7-4f40-8144-edd9818ef291.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">文件名为 report_2026-02-20_FINAL_v3.pdf，请确认版本。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">文件名为Report T
+2026年2月20日
+成Final PDF
+请确认版本</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="d0576e9a-12e3-4a81-9375-f7bcd006949c mixed_lang, negation, unicode 地址写作：No. 12，别把空格吞掉。 地址协作弄十二 别把空格吞掉">
+<summary>
+<div class="score">58.9</div>
+<div class="summary-line"><div>地址写作：No. 12，别把空格吞掉。</div><div class="tags">mixed_lang, negation, unicode</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="d0576e9a-12e3-4a81-9375-f7bcd006949c.wav"></audio>
+<div class='kv'><div><strong>id</strong>: d0576e9a-12e3-4a81-9375-f7bcd006949c</div><div><strong>score</strong>: 58.9 &nbsp; <strong>cer</strong>: 0.44 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>d0576e9a-12e3-4a81-9375-f7bcd006949c.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">地址写作：No. 12，别把空格吞掉。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">地址协作弄十二
+别把空格吞掉</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="350dfc8f-261a-4c53-aa5c-ce4f33d5b81c mixed_lang, numbers 文件名为 report_2026-02-20_FINAL_v3.pdf，请确认版本。 文件名为Report T 2026年2月20日 Final PDF 请确认版本">
+<summary>
+<div class="score">57.8</div>
+<div class="summary-line"><div>文件名为 report_2026-02-20_FINAL_v3.pdf，请确认版本。</div><div class="tags">mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="350dfc8f-261a-4c53-aa5c-ce4f33d5b81c.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 350dfc8f-261a-4c53-aa5c-ce4f33d5b81c</div><div><strong>score</strong>: 57.8 &nbsp; <strong>cer</strong>: 0.44 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>350dfc8f-261a-4c53-aa5c-ce4f33d5b81c.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">文件名为 report_2026-02-20_FINAL_v3.pdf，请确认版本。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">文件名为Report T
+2026年2月20日
+Final PDF
+请确认版本</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="8ee129da-7270-4e12-9c75-9a8e4fccc136 broadcast, mixed_lang, numbers 阈值为 1e-3，采样率 44.1 kHz，帧长 25 ms。 预值为113 采样率44.1K核子 正常25毫秒">
+<summary>
+<div class="score">56.6</div>
+<div class="summary-line"><div>阈值为 1e-3，采样率 44.1 kHz，帧长 25 ms。</div><div class="tags">broadcast, mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="8ee129da-7270-4e12-9c75-9a8e4fccc136.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 8ee129da-7270-4e12-9c75-9a8e4fccc136</div><div><strong>score</strong>: 56.6 &nbsp; <strong>cer</strong>: 0.43 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>8ee129da-7270-4e12-9c75-9a8e4fccc136.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">阈值为 1e-3，采样率 44.1 kHz，帧长 25 ms。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">预值为113
+采样率44.1K核子
+正常25毫秒</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="2a33b61a-c2c7-4815-a19c-0e109499d861 numbers, unicode 请逐字朗读：a​b​c（每个字母之间有零宽空格）。 请竹子朗读ABC 每个字母之间有灵宽空格">
+<summary>
+<div class="score">52.7</div>
+<div class="summary-line"><div>请逐字朗读：a​b​c（每个字母之间有零宽空格）。</div><div class="tags">numbers, unicode</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="2a33b61a-c2c7-4815-a19c-0e109499d861.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 2a33b61a-c2c7-4815-a19c-0e109499d861</div><div><strong>score</strong>: 52.7 &nbsp; <strong>cer</strong>: 0.35 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>2a33b61a-c2c7-4815-a19c-0e109499d861.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">请逐字朗读：a​b​c（每个字母之间有零宽空格）。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">请竹子朗读ABC
+每个字母之间有灵宽空格</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="ebdfc3b1-f1b3-4148-8148-b138cbfd6841 broadcast, mixed_lang, numbers 电池容量 5000mAh，充电功率 67W，约 0.8 小时充满。 电池容量五千米 充电功率六十七W 约零点八小时充满">
+<summary>
+<div class="score">52.2</div>
+<div class="summary-line"><div>电池容量 5000mAh，充电功率 67W，约 0.8 小时充满。</div><div class="tags">broadcast, mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="ebdfc3b1-f1b3-4148-8148-b138cbfd6841.wav"></audio>
+<div class='kv'><div><strong>id</strong>: ebdfc3b1-f1b3-4148-8148-b138cbfd6841</div><div><strong>score</strong>: 52.2 &nbsp; <strong>cer</strong>: 0.50 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.67</div><div><strong>wav</strong>: <span class='filelink'>ebdfc3b1-f1b3-4148-8148-b138cbfd6841.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">电池容量 5000mAh，充电功率 67W，约 0.8 小时充满。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">电池容量五千米
+充电功率六十七W
+约零点八小时充满</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="e7feed57-574b-47e8-849a-a770f370eae6 mixed_lang, numbers, unicode 提示：别把 𝟙𝟚𝟛（数学粗体数字）当成普通 123。 提示 别把数学粗体数字 当成普通一二三">
+<summary>
+<div class="score">51.7</div>
+<div class="summary-line"><div>提示：别把 𝟙𝟚𝟛（数学粗体数字）当成普通 123。</div><div class="tags">mixed_lang, numbers, unicode</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="e7feed57-574b-47e8-849a-a770f370eae6.wav"></audio>
+<div class='kv'><div><strong>id</strong>: e7feed57-574b-47e8-849a-a770f370eae6</div><div><strong>score</strong>: 51.7 &nbsp; <strong>cer</strong>: 0.33 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>e7feed57-574b-47e8-849a-a770f370eae6.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">提示：别把 𝟙𝟚𝟛（数学粗体数字）当成普通 123。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">提示
+别把数学粗体数字
+当成普通一二三</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="a13c7b9d-ad8a-4b6b-91fa-2fc60f5a0bab guwen, polyphone 重为轻根，静为躁君。 崇为清甘 敬为造军">
+<summary>
+<div class="score">50.5</div>
+<div class="summary-line"><div>重为轻根，静为躁君。</div><div class="tags">guwen, polyphone</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="a13c7b9d-ad8a-4b6b-91fa-2fc60f5a0bab.wav"></audio>
+<div class='kv'><div><strong>id</strong>: a13c7b9d-ad8a-4b6b-91fa-2fc60f5a0bab</div><div><strong>score</strong>: 50.5 &nbsp; <strong>cer</strong>: 0.75 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>a13c7b9d-ad8a-4b6b-91fa-2fc60f5a0bab.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">重为轻根，静为躁君。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">崇为清甘 敬为造军</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="a7514f96-8d54-42d1-bf17-cbdd79a2fb60 broadcast, mixed_lang, numbers 账单号：INV-2026-000123，开票日期 2026-02-01。 账单号因为2026000123 开票日期2026年2月1日">
+<summary>
+<div class="score">50.5</div>
+<div class="summary-line"><div>账单号：INV-2026-000123，开票日期 2026-02-01。</div><div class="tags">broadcast, mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="a7514f96-8d54-42d1-bf17-cbdd79a2fb60.wav"></audio>
+<div class='kv'><div><strong>id</strong>: a7514f96-8d54-42d1-bf17-cbdd79a2fb60</div><div><strong>score</strong>: 50.5 &nbsp; <strong>cer</strong>: 0.33 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>a7514f96-8d54-42d1-bf17-cbdd79a2fb60.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">账单号：INV-2026-000123，开票日期 2026-02-01。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">账单号因为2026000123
+开票日期2026年2月1日</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="d74343f8-d76b-4d7b-bc31-8b5631d3de34 guwen, negation, polyphone 曾子曰：吾日三省吾身。 曾子曰 无日三省无身">
+<summary>
+<div class="score">49.0</div>
+<div class="summary-line"><div>曾子曰：吾日三省吾身。</div><div class="tags">guwen, negation, polyphone</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="d74343f8-d76b-4d7b-bc31-8b5631d3de34.wav"></audio>
+<div class='kv'><div><strong>id</strong>: d74343f8-d76b-4d7b-bc31-8b5631d3de34</div><div><strong>score</strong>: 49.0 &nbsp; <strong>cer</strong>: 0.30 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>d74343f8-d76b-4d7b-bc31-8b5631d3de34.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">曾子曰：吾日三省吾身。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">曾子曰 无日三省无身</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="d1be7151-9328-4124-958b-969bc827b613 mixed_lang, unicode 这行代码看起来像 payload，但其实是 pаyload（a 是西里尔字母）。 这行代码看起来像佩露的 但其实是PY露的 是希里尔字母">
+<summary>
+<div class="score">48.1</div>
+<div class="summary-line"><div>这行代码看起来像 payload，但其实是 pаyload（a 是西里尔字母）。</div><div class="tags">mixed_lang, unicode</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="d1be7151-9328-4124-958b-969bc827b613.wav"></audio>
+<div class='kv'><div><strong>id</strong>: d1be7151-9328-4124-958b-969bc827b613</div><div><strong>score</strong>: 48.1 &nbsp; <strong>cer</strong>: 0.48 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.47</div><div><strong>wav</strong>: <span class='filelink'>d1be7151-9328-4124-958b-969bc827b613.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">这行代码看起来像 payload，但其实是 pаyload（a 是西里尔字母）。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">这行代码看起来像佩露的
+但其实是PY露的
+是希里尔字母</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="87069126-5db0-438c-991b-663d735f2547 guwen, polyphone 度德量力，量力而行。 杜德亮丽 亮丽而行">
+<summary>
+<div class="score">47.5</div>
+<div class="summary-line"><div>度德量力，量力而行。</div><div class="tags">guwen, polyphone</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="87069126-5db0-438c-991b-663d735f2547.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 87069126-5db0-438c-991b-663d735f2547</div><div><strong>score</strong>: 47.5 &nbsp; <strong>cer</strong>: 0.62 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>87069126-5db0-438c-991b-663d735f2547.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">度德量力，量力而行。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">杜德亮丽 亮丽而行</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="06f8ae40-d749-45ce-96e3-363567e19ff2 broadcast, mixed_lang, numbers 保修期 24 个月，或行驶里程 60,000 km，以先到者为准。 保修期二十四个月 或行驶里程六十零零零公里 以仙道者为准">
+<summary>
+<div class="score">46.8</div>
+<div class="summary-line"><div>保修期 24 个月，或行驶里程 60,000 km，以先到者为准。</div><div class="tags">broadcast, mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="06f8ae40-d749-45ce-96e3-363567e19ff2.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 06f8ae40-d749-45ce-96e3-363567e19ff2</div><div><strong>score</strong>: 46.8 &nbsp; <strong>cer</strong>: 0.48 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.50</div><div><strong>wav</strong>: <span class='filelink'>06f8ae40-d749-45ce-96e3-363567e19ff2.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">保修期 24 个月，或行驶里程 60,000 km，以先到者为准。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">保修期二十四个月
+或行驶里程六十零零零公里
+以仙道者为准</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="75a696da-7107-413e-a8a8-f2514f4916b5 mixed_lang 请把 &#x27;cache miss&#x27; 翻译成中文时不要丢掉 miss 的含义。 请把凯史密斯翻译成中文时 不要丢掉密斯的含义">
+<summary>
+<div class="score">45.9</div>
+<div class="summary-line"><div>请把 &#x27;cache miss&#x27; 翻译成中文时不要丢掉 miss 的含义。</div><div class="tags">mixed_lang</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="75a696da-7107-413e-a8a8-f2514f4916b5.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 75a696da-7107-413e-a8a8-f2514f4916b5</div><div><strong>score</strong>: 45.9 &nbsp; <strong>cer</strong>: 0.46 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.50</div><div><strong>wav</strong>: <span class='filelink'>75a696da-7107-413e-a8a8-f2514f4916b5.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">请把 &#x27;cache miss&#x27; 翻译成中文时不要丢掉 miss 的含义。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">请把凯史密斯翻译成中文时
+不要丢掉密斯的含义</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="f2052a62-545e-4721-81a2-69cbe1ac5bb8 broadcast, mixed_lang, numbers IP 为 192.168.0.1，端口 8080；超时 30s 后重试 3 次。 IP为192.168.0.1 端口八千零八十 超时三十秒后重施三次">
+<summary>
+<div class="score">45.5</div>
+<div class="summary-line"><div>IP 为 192.168.0.1，端口 8080；超时 30s 后重试 3 次。</div><div class="tags">broadcast, mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="f2052a62-545e-4721-81a2-69cbe1ac5bb8.wav"></audio>
+<div class='kv'><div><strong>id</strong>: f2052a62-545e-4721-81a2-69cbe1ac5bb8</div><div><strong>score</strong>: 45.5 &nbsp; <strong>cer</strong>: 0.33 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.80</div><div><strong>wav</strong>: <span class='filelink'>f2052a62-545e-4721-81a2-69cbe1ac5bb8.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">IP 为 192.168.0.1，端口 8080；超时 30s 后重试 3 次。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">IP为192.168.0.1
+端口八千零八十
+超时三十秒后重施三次</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="35a84f44-a6ba-46e4-b9f5-a182eea79b55 negation, polyphone 老师说：好好学习，不要好高骛远。 老师说好好学习 不要好高无援">
+<summary>
+<div class="score">44.5</div>
+<div class="summary-line"><div>老师说：好好学习，不要好高骛远。</div><div class="tags">negation, polyphone</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="35a84f44-a6ba-46e4-b9f5-a182eea79b55.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 35a84f44-a6ba-46e4-b9f5-a182eea79b55</div><div><strong>score</strong>: 44.5 &nbsp; <strong>cer</strong>: 0.21 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>35a84f44-a6ba-46e4-b9f5-a182eea79b55.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">老师说：好好学习，不要好高骛远。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">老师说好好学习
+不要好高无援</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="8037a6a3-cf0a-4b38-ac48-40ad9751c364 mixed_lang, numbers 我们在 Kubernetes 上跑服务，namespace 是 prod，pod 数量是 12。 我们在Kubernetes上跑福 Namespace是Pod Pod的数量是12">
+<summary>
+<div class="score">41.3</div>
+<div class="summary-line"><div>我们在 Kubernetes 上跑服务，namespace 是 prod，pod 数量是 12。</div><div class="tags">mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="8037a6a3-cf0a-4b38-ac48-40ad9751c364.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 8037a6a3-cf0a-4b38-ac48-40ad9751c364</div><div><strong>score</strong>: 41.3 &nbsp; <strong>cer</strong>: 0.18 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>8037a6a3-cf0a-4b38-ac48-40ad9751c364.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">我们在 Kubernetes 上跑服务，namespace 是 prod，pod 数量是 12。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">我们在Kubernetes上跑福
+Namespace是Pod
+Pod的数量是12</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="cfcda637-e8ec-4213-86ad-6f4e7f77530e guwen, negation, polyphone 问渠那得清如许，为有源头活水来。 问渠纳得清如许 未有源头活水来">
+<summary>
+<div class="score">40.7</div>
+<div class="summary-line"><div>问渠那得清如许，为有源头活水来。</div><div class="tags">guwen, negation, polyphone</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="cfcda637-e8ec-4213-86ad-6f4e7f77530e.wav"></audio>
+<div class='kv'><div><strong>id</strong>: cfcda637-e8ec-4213-86ad-6f4e7f77530e</div><div><strong>score</strong>: 40.7 &nbsp; <strong>cer</strong>: 0.14 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>cfcda637-e8ec-4213-86ad-6f4e7f77530e.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">问渠那得清如许，为有源头活水来。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">问渠纳得清如许
+未有源头活水来</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="614caedf-c6f1-4d4c-88ab-b592232df243 guwen, numbers, polyphone 冠者五六人，童子六七人，浴乎沂，风乎舞雩。 冠者五六人 童子六七人 御护仪 奉护五欲">
+<summary>
+<div class="score">40.2</div>
+<div class="summary-line"><div>冠者五六人，童子六七人，浴乎沂，风乎舞雩。</div><div class="tags">guwen, numbers, polyphone</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="614caedf-c6f1-4d4c-88ab-b592232df243.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 614caedf-c6f1-4d4c-88ab-b592232df243</div><div><strong>score</strong>: 40.2 &nbsp; <strong>cer</strong>: 0.41 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.33</div><div><strong>wav</strong>: <span class='filelink'>614caedf-c6f1-4d4c-88ab-b592232df243.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">冠者五六人，童子六七人，浴乎沂，风乎舞雩。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">冠者五六人 童子六七人
+御护仪 奉护五欲</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="fcd4efab-e98d-4186-92d2-35da0dbd0d4b mixed_lang, unicode 注意：&#x27;＠&#x27; 是全角 at，不是 &#x27;@&#x27;。 注意!是全杰AT,不是!">
+<summary>
+<div class="score">39.6</div>
+<div class="summary-line"><div>注意：&#x27;＠&#x27; 是全角 at，不是 &#x27;@&#x27;。</div><div class="tags">mixed_lang, unicode</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="fcd4efab-e98d-4186-92d2-35da0dbd0d4b.wav"></audio>
+<div class='kv'><div><strong>id</strong>: fcd4efab-e98d-4186-92d2-35da0dbd0d4b</div><div><strong>score</strong>: 39.6 &nbsp; <strong>cer</strong>: 0.45 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.27</div><div><strong>wav</strong>: <span class='filelink'>fcd4efab-e98d-4186-92d2-35da0dbd0d4b.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">注意：&#x27;＠&#x27; 是全角 at，不是 &#x27;@&#x27;。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">注意!是全杰AT,不是!</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="6186dc08-a811-4eb4-a01e-fd2db5e410d5 mixed_lang, numbers 邮件标题写 RE: Incident #12345，不要写成 Reply。 邮件标题写Reincident 卓12345 不要写成Reply">
+<summary>
+<div class="score">38.2</div>
+<div class="summary-line"><div>邮件标题写 RE: Incident #12345，不要写成 Reply。</div><div class="tags">mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="6186dc08-a811-4eb4-a01e-fd2db5e410d5.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 6186dc08-a811-4eb4-a01e-fd2db5e410d5</div><div><strong>score</strong>: 38.2 &nbsp; <strong>cer</strong>: 0.13 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 1.00</div><div><strong>wav</strong>: <span class='filelink'>6186dc08-a811-4eb4-a01e-fd2db5e410d5.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">邮件标题写 RE: Incident #12345，不要写成 Reply。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">邮件标题写Reincident 卓12345
+不要写成Reply</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="c859298a-4c1c-4536-992e-8e26f1ea334d broadcast, mixed_lang, numbers 每日用量 3–5 次/天，每次 0.5 ml，连续 7 天。 每日用量三排五次 债天每次零点五毫升连续七天">
+<summary>
+<div class="score">35.5</div>
+<div class="summary-line"><div>每日用量 3–5 次/天，每次 0.5 ml，连续 7 天。</div><div class="tags">broadcast, mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="c859298a-4c1c-4536-992e-8e26f1ea334d.wav"></audio>
+<div class='kv'><div><strong>id</strong>: c859298a-4c1c-4536-992e-8e26f1ea334d</div><div><strong>score</strong>: 35.5 &nbsp; <strong>cer</strong>: 0.50 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>c859298a-4c1c-4536-992e-8e26f1ea334d.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">每日用量 3–5 次/天，每次 0.5 ml，连续 7 天。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">每日用量三排五次
+债天每次零点五毫升连续七天</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="23e9e901-74b5-48a8-9878-ea7c0712c772 punctuation 她问：『你确定吗？』我答：『确定。』然后就挂断了。 他问他你确定吗 拽我搭传确定 拽然后就挂断了">
+<summary>
+<div class="score">32.0</div>
+<div class="summary-line"><div>她问：『你确定吗？』我答：『确定。』然后就挂断了。</div><div class="tags">punctuation</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="23e9e901-74b5-48a8-9878-ea7c0712c772.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 23e9e901-74b5-48a8-9878-ea7c0712c772</div><div><strong>score</strong>: 32.0 &nbsp; <strong>cer</strong>: 0.38 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>23e9e901-74b5-48a8-9878-ea7c0712c772.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">她问：『你确定吗？』我答：『确定。』然后就挂断了。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">他问他你确定吗
+拽我搭传确定
+拽然后就挂断了</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="bb874b69-4101-4b01-b1f1-d3b78b3bf131 mixed_lang 请访问 https://example.com/reset?token=abc123 完成重置。 请访问HTTPS Example Commerce Set Token等于ABC123完成重置">
+<summary>
+<div class="score">31.8</div>
+<div class="summary-line"><div>请访问 https://example.com/reset?token=abc123 完成重置。</div><div class="tags">mixed_lang</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="bb874b69-4101-4b01-b1f1-d3b78b3bf131.wav"></audio>
+<div class='kv'><div><strong>id</strong>: bb874b69-4101-4b01-b1f1-d3b78b3bf131</div><div><strong>score</strong>: 31.8 &nbsp; <strong>cer</strong>: 0.44 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>bb874b69-4101-4b01-b1f1-d3b78b3bf131.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">请访问 https://example.com/reset?token=abc123 完成重置。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">请访问HTTPS
+Example Commerce Set
+Token等于ABC123完成重置</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="e4e01985-9f26-48dc-90e7-988051d454b9 mixed_lang, numbers 请把 DNS 解析指向 1.1.1.1 和 8.8.8.8，再测试 ping。 请把DNS解析指向1.1.1.1和8.8.8.8再测试PIN">
+<summary>
+<div class="score">29.9</div>
+<div class="summary-line"><div>请把 DNS 解析指向 1.1.1.1 和 8.8.8.8，再测试 ping。</div><div class="tags">mixed_lang, numbers</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="e4e01985-9f26-48dc-90e7-988051d454b9.wav"></audio>
+<div class='kv'><div><strong>id</strong>: e4e01985-9f26-48dc-90e7-988051d454b9</div><div><strong>score</strong>: 29.9 &nbsp; <strong>cer</strong>: 0.13 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.67</div><div><strong>wav</strong>: <span class='filelink'>e4e01985-9f26-48dc-90e7-988051d454b9.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">请把 DNS 解析指向 1.1.1.1 和 8.8.8.8，再测试 ping。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">请把DNS解析指向1.1.1.1和8.8.8.8再测试PIN</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="649497b7-58d2-4bf7-b68d-783684f5f7f1 guwen, polyphone 将军将至，士卒皆惊。 将军将至 士族接近">
+<summary>
+<div class="score">28.0</div>
+<div class="summary-line"><div>将军将至，士卒皆惊。</div><div class="tags">guwen, polyphone</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="649497b7-58d2-4bf7-b68d-783684f5f7f1.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 649497b7-58d2-4bf7-b68d-783684f5f7f1</div><div><strong>score</strong>: 28.0 &nbsp; <strong>cer</strong>: 0.38 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>649497b7-58d2-4bf7-b68d-783684f5f7f1.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">将军将至，士卒皆惊。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">将军将至 士族接近</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="a6134318-9b6d-4db8-8540-137349227931 guwen, polyphone 礼乐崩坏，刑罚不中。 李月崩壞刑罚不中">
+<summary>
+<div class="score">28.0</div>
+<div class="summary-line"><div>礼乐崩坏，刑罚不中。</div><div class="tags">guwen, polyphone</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="a6134318-9b6d-4db8-8540-137349227931.wav"></audio>
+<div class='kv'><div><strong>id</strong>: a6134318-9b6d-4db8-8540-137349227931</div><div><strong>score</strong>: 28.0 &nbsp; <strong>cer</strong>: 0.38 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>a6134318-9b6d-4db8-8540-137349227931.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">礼乐崩坏，刑罚不中。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">李月崩壞刑罚不中</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="9d2589cf-e5f8-49bf-bf1e-2006ae4587aa guwen, polyphone 学而时习之，不亦说乎？ 雪儿实习之不亦说乎">
+<summary>
+<div class="score">25.5</div>
+<div class="summary-line"><div>学而时习之，不亦说乎？</div><div class="tags">guwen, polyphone</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="9d2589cf-e5f8-49bf-bf1e-2006ae4587aa.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 9d2589cf-e5f8-49bf-bf1e-2006ae4587aa</div><div><strong>score</strong>: 25.5 &nbsp; <strong>cer</strong>: 0.33 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>9d2589cf-e5f8-49bf-bf1e-2006ae4587aa.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">学而时习之，不亦说乎？</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">雪儿实习之不亦说乎</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="786dfab1-01b1-4f4c-abae-24f4a1d9f75d guwen, polyphone 长者赐，不敢辞。 长者刺不敢刺">
+<summary>
+<div class="score">25.5</div>
+<div class="summary-line"><div>长者赐，不敢辞。</div><div class="tags">guwen, polyphone</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="786dfab1-01b1-4f4c-abae-24f4a1d9f75d.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 786dfab1-01b1-4f4c-abae-24f4a1d9f75d</div><div><strong>score</strong>: 25.5 &nbsp; <strong>cer</strong>: 0.33 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>786dfab1-01b1-4f4c-abae-24f4a1d9f75d.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">长者赐，不敢辞。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">长者刺不敢刺</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="f470e83d-1dc4-418f-bbd6-63b23d74b384 mixed_lang 服务跑在 us-east-1a，延迟从 23ms 上升到 120ms。 服务跑在US-East-EA 延迟从23毫秒上升到120毫秒">
+<summary>
+<div class="score">24.6</div>
+<div class="summary-line"><div>服务跑在 us-east-1a，延迟从 23ms 上升到 120ms。</div><div class="tags">mixed_lang</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="f470e83d-1dc4-418f-bbd6-63b23d74b384.wav"></audio>
+<div class='kv'><div><strong>id</strong>: f470e83d-1dc4-418f-bbd6-63b23d74b384</div><div><strong>score</strong>: 24.6 &nbsp; <strong>cer</strong>: 0.31 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>f470e83d-1dc4-418f-bbd6-63b23d74b384.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">服务跑在 us-east-1a，延迟从 23ms 上升到 120ms。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">服务跑在US-East-EA
+延迟从23毫秒上升到120毫秒</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="28af01b2-a928-409b-8d8e-8e990d09f3a5 guwen, polyphone 数罟不入洿池，鱼鳖不可胜食也。 属虚不入戏池 鱼鞭不可胜食也">
+<summary>
+<div class="score">24.0</div>
+<div class="summary-line"><div>数罟不入洿池，鱼鳖不可胜食也。</div><div class="tags">guwen, polyphone</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="28af01b2-a928-409b-8d8e-8e990d09f3a5.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 28af01b2-a928-409b-8d8e-8e990d09f3a5</div><div><strong>score</strong>: 24.0 &nbsp; <strong>cer</strong>: 0.31 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>28af01b2-a928-409b-8d8e-8e990d09f3a5.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">数罟不入洿池，鱼鳖不可胜食也。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">属虚不入戏池 鱼鞭不可胜食也</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="f35b28a2-d4ff-4527-84e6-6b839ac5a930 punctuation 请在备注里写：『已核对，无误。』并签名。 请在备注里写 其以核对 无误掐柄签名">
+<summary>
+<div class="score">22.6</div>
+<div class="summary-line"><div>请在备注里写：『已核对，无误。』并签名。</div><div class="tags">punctuation</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="f35b28a2-d4ff-4527-84e6-6b839ac5a930.wav"></audio>
+<div class='kv'><div><strong>id</strong>: f35b28a2-d4ff-4527-84e6-6b839ac5a930</div><div><strong>score</strong>: 22.6 &nbsp; <strong>cer</strong>: 0.29 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>f35b28a2-d4ff-4527-84e6-6b839ac5a930.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">请在备注里写：『已核对，无误。』并签名。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">请在备注里写
+其以核对
+无误掐柄签名</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="cefe9d95-285b-4bcb-a71e-e534332d04b6 mixed_lang 请把日志发到 ops-alert@company.com，主题写 CPU 过热。 请把日志发到OPUS Alert Company Comp 主题写CPU过热">
+<summary>
+<div class="score">22.6</div>
+<div class="summary-line"><div>请把日志发到 ops-alert@company.com，主题写 CPU 过热。</div><div class="tags">mixed_lang</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="cefe9d95-285b-4bcb-a71e-e534332d04b6.wav"></audio>
+<div class='kv'><div><strong>id</strong>: cefe9d95-285b-4bcb-a71e-e534332d04b6</div><div><strong>score</strong>: 22.6 &nbsp; <strong>cer</strong>: 0.29 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>cefe9d95-285b-4bcb-a71e-e534332d04b6.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">请把日志发到 ops-alert@company.com，主题写 CPU 过热。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">请把日志发到OPUS Alert Company
+Comp 主题写CPU过热</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="622cf758-90fa-4552-a430-daad5ead6c37 guwen, polyphone 知之者不如好之者，好之者不如乐之者。 支持者不如耗之者 耗之者不如乐之者">
+<summary>
+<div class="score">20.5</div>
+<div class="summary-line"><div>知之者不如好之者，好之者不如乐之者。</div><div class="tags">guwen, polyphone</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="622cf758-90fa-4552-a430-daad5ead6c37.wav"></audio>
+<div class='kv'><div><strong>id</strong>: 622cf758-90fa-4552-a430-daad5ead6c37</div><div><strong>score</strong>: 20.5 &nbsp; <strong>cer</strong>: 0.25 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>622cf758-90fa-4552-a430-daad5ead6c37.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">知之者不如好之者，好之者不如乐之者。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">支持者不如耗之者
+耗之者不如乐之者</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="c68c9cd7-5c52-4c79-b99e-7b7e220095e0 mixed_lang 请用 JSON schema 校验输出，避免 parse error。 请用Jason Schema校验输出 避免Parse Error">
+<summary>
+<div class="score">20.5</div>
+<div class="summary-line"><div>请用 JSON schema 校验输出，避免 parse error。</div><div class="tags">mixed_lang</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="c68c9cd7-5c52-4c79-b99e-7b7e220095e0.wav"></audio>
+<div class='kv'><div><strong>id</strong>: c68c9cd7-5c52-4c79-b99e-7b7e220095e0</div><div><strong>score</strong>: 20.5 &nbsp; <strong>cer</strong>: 0.25 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>c68c9cd7-5c52-4c79-b99e-7b7e220095e0.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">请用 JSON schema 校验输出，避免 parse error。</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">请用Jason Schema校验输出
+避免Parse Error</pre>
+</div>
+</div>
+</div>
+</details>
+<details class="case" data-search="d5c67e4b-8a08-4ae0-bb9a-75fb0b9cfec9 guwen, polyphone, punctuation 礼乐崩坏，刑罚不中。（括号里也要读出来） 李月崩壞刑罚不中 括号你也要读出来">
+<summary>
+<div class="score">18.0</div>
+<div class="summary-line"><div>礼乐崩坏，刑罚不中。（括号里也要读出来）</div><div class="tags">guwen, polyphone, punctuation</div></div>
+</summary>
+<div class="case-body">
+<div class="top-row">
+<audio controls preload="none" src="d5c67e4b-8a08-4ae0-bb9a-75fb0b9cfec9.wav"></audio>
+<div class='kv'><div><strong>id</strong>: d5c67e4b-8a08-4ae0-bb9a-75fb0b9cfec9</div><div><strong>score</strong>: 18.0 &nbsp; <strong>cer</strong>: 0.25 &nbsp; <strong>wer</strong>: 0.00 &nbsp; <strong>critical</strong>: 0.00</div><div><strong>wav</strong>: <span class='filelink'>d5c67e4b-8a08-4ae0-bb9a-75fb0b9cfec9.wav</span></div></div>
+</div>
+<div class="grid">
+<div class="panel">
+<h3>GT (ref_text)</h3>
+<pre class="text">礼乐崩坏，刑罚不中。（括号里也要读出来）</pre>
+</div>
+<div class="panel">
+<h3>ASR (hyp_text)</h3>
+<pre class="text">李月崩壞刑罚不中
+括号你也要读出来</pre>
+</div>
+</div>
+</div>
+</details>
+</div>
+<script>
+  const q = document.getElementById('q');
+  const list = document.getElementById('list');
+  const details = () => Array.from(list.querySelectorAll('details.case'));
+
+  function applyFilter() {
+    const needle = (q.value || '').trim().toLowerCase();
+    let shown = 0;
+    for (const el of details()) {
+      const hay = (el.getAttribute('data-search') || '').toLowerCase();
+      const ok = !needle || hay.includes(needle);
+      el.style.display = ok ? '' : 'none';
+      if (ok) shown++;
+    }
+    document.getElementById('caseCount').textContent = String(shown);
+  }
+
+  q.addEventListener('input', applyFilter);
+
+  document.getElementById('expandAll').addEventListener('click', () => {
+    for (const el of details()) el.open = true;
+  });
+  document.getElementById('collapseAll').addEventListener('click', () => {
+    for (const el of details()) el.open = false;
+  });
+</script>
+</body></html>

@@ -18,8 +18,10 @@ def _build_parser() -> argparse.ArgumentParser:
     run_p.add_argument("--budget", type=int, default=500, help="Max total evaluations")
     run_p.add_argument("--budget-accepted", type=int, default=100, help="Stop after N accepted")
     run_p.add_argument("--concurrency", type=int, default=8)
+    run_p.add_argument("--tts-concurrency", type=int, default=0, help="0 means use --concurrency")
+    run_p.add_argument("--asr-concurrency", type=int, default=0, help="0 means use --concurrency")
     run_p.add_argument("--time-limit-sec", type=float, default=0.0, help="0 means no limit")
-    run_p.add_argument("--tts", choices=["dummy", "macos_say", "qwen3_tts", "http"], default="dummy")
+    run_p.add_argument("--tts", choices=["dummy", "macos_say", "qwen3_tts", "indextts2", "http"], default="dummy")
     run_p.add_argument("--asr", choices=["dummy", "whisper_cli", "http"], default="dummy")
     run_p.add_argument("--llm", choices=["none", "dummy", "http"], default="none")
     run_p.add_argument("--enable-llm", action="store_true")
@@ -76,6 +78,8 @@ def main(argv: list[str] | None = None) -> int:
             budget_total_eval=args.budget,
             budget_accepted=args.budget_accepted,
             concurrency=args.concurrency,
+            tts_concurrency=(args.tts_concurrency or 0),
+            asr_concurrency=(args.asr_concurrency or 0),
             time_limit_sec=args.time_limit_sec,
             tts_kind=args.tts,
             asr_kind=args.asr,
